@@ -1,0 +1,39 @@
+(function ($) {
+
+    /**
+     * initializeBlock
+     *
+     * Adds custom JavaScript to the block HTML.
+     *
+     * @date    15/4/19
+     * @since   1.0.0
+     *
+     * @param   object $block The block jQuery element.
+     * @param   object attributes The block attributes (only available when editing).
+     * @return  void
+     */
+
+    var initializeBlock = function ($block) {
+        
+        var gallerySlider = $block.find('.gallery.slider .items');
+        if (gallerySlider.length > 0) {
+            for (var i = 0; i < gallerySlider.length; i++) {
+                if ( $(gallerySlider[i]).hasClass('slick-initialized') ) {
+                    $(gallerySlider[i]).slick('unslick');
+                } 
+                    // Init first gallerySlider
+                    $(gallerySlider[i]).slick();
+                
+            }
+        }
+
+        
+
+    }
+
+    // Initialize dynamic block preview (editor).
+    if (window.acf) {
+        window.acf.addAction('render_block_preview/type=slider', initializeBlock);
+    }
+
+})(jQuery);

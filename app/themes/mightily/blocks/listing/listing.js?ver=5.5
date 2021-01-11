@@ -1,0 +1,65 @@
+(function ($) {
+
+    /**
+     * initializeBlock
+     *
+     * Adds custom JavaScript to the block HTML.
+     *
+     * @date    15/4/19
+     * @since   1.0.0
+     *
+     * @param   object $block The block jQuery element.
+     * @param   object attributes The block attributes (only available when editing).
+     * @return  void
+     */
+    var initializeBlock = function ($block) {
+        // $block is null when edit screen first loads. Must stop this function if it's null.
+        if (!$block) {
+            return false;
+        }
+        console.log('Listing block loaded');
+        var sliderListing = $block.find('.listing-slider .deck-of-cards');
+        if (sliderListing.length > 0) {
+            for (var i = 0; i < sliderListing.length; i++) {
+                console.log('slick init');
+                if (sliderListing.hasClass('slick-initialized')) {
+                    $(sliderListing[i]).slick('unslick');
+                    console.log(`unslick: ${i}`);
+                }
+                // If first child element is an li then wrap it in a div
+                if ($(sliderListing[i]).not('.slick-initialized').find('> li').length > 0) {
+                    $(sliderListing[i]).find('li').wrap('<div></div>');
+                }
+                $(sliderListing[i]).not('.slick-initialized').slick({
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                });
+
+
+                // setTimeout(function() {
+                // console.log('slick init');
+                // if (sliderListing.hasClass('slick-initialized')) {
+                //     $(sliderListing[i]).slick('unslick');
+                //     console.log(`unslick: ${i}`);
+                // }
+                // $(sliderListing[i]).slick({
+                //     slidesToShow: 3, 
+                //     slidesToScroll: 3,
+                // });
+                // }, 5000);
+            }
+        }
+
+    }
+
+    // Initialize each block on page load (front end).
+    $(document).ready(function () {
+        initializeBlock();
+    });
+
+    // Initialize dynamic block preview (editor).
+    if (window.acf) {
+        window.acf.addAction('render_block_preview/type=listing', initializeBlock);
+    }
+
+})(jQuery);
